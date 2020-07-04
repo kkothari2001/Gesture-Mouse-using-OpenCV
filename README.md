@@ -22,7 +22,7 @@ A mouse that detects the position and orientation of your fingers using image pr
 
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](screenshot.jpg)
+![Product Name Screen Shot](screenshot.jpg)
 
 Aim and Description of project.  
 Refer this [documentation](https://drive.google.com/file/d/1jPo3_0TGM8b9NZWqUmkB7iy4CfzowOmz/view?usp=sharing)
