@@ -5,13 +5,18 @@ import wx
 mouse = Controller()
 
 
+# To get the screen size
 app = wx.App(False)
 (sx, sy) = wx.GetDisplaySize()
 
+
+# To set the HSV values of range
 lower_blue = np.array([110, 100, 100])
 upper_blue = np.array([130, 255, 255])
 lower_red = np.array([170, 120, 70])
 upper_red = np.array([180, 255, 255])
+
+# To resize the image according to the screen size
 imw = 500
 imh = int(imw * (sy / sx))
 mousePress = False
@@ -21,18 +26,33 @@ cap = cv2.VideoCapture(0)
 while True:
     _, img = cap.read()
     img = cv2.resize(img, (imw, imh))
+    # Conversion to HSV
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
+    # Detection using HSV segmentation
     red_mask = cv2.inRange(hsv, lower_red, upper_red)
+    cv2.imshow("red_init", red_mask)
+
     blue_mask = cv2.inRange(hsv, lower_blue, upper_blue)
+    cv2.imshow("blue_init", blue_mask)
+
+    # MIX MASK
     mix = cv2.bitwise_or(red_mask, blue_mask)
+    cv2.imshow("mix_init", mix)
+
     mix = cv2.GaussianBlur(mix, (7, 7), 0)
     _, mix = cv2.threshold(mix, 50, 255, cv2.THRESH_BINARY)
 
+    # Blurs
     red_blur = cv2.medianBlur(red_mask, 11)
     blue_blur = cv2.medianBlur(blue_mask, 11)
     mix_blur = cv2.medianBlur(mix, 11)
 
+    cv2.imshow("red_blur", red_blur)
+    cv2.imshow("blue_blur", blue_blur)
+    cv2.imshow("mix_blur", mix_blur)
+
+    # Detect Contours
     mix_cont, heir = cv2.findContours(
         mix_blur, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     red_cont, heir = cv2.findContours(
@@ -54,6 +74,7 @@ while True:
             mouse.release(Button.left)
             mousePress = False
 
+        # Detect the centroid
         if M_red["m00"] != 0:
             flag1 = True
             c1X = int(M_red["m10"] / M_red["m00"])
@@ -62,6 +83,8 @@ while True:
 
         M_blue = cv2.moments(blue_hull)
         flag2 = False
+
+        # Detect the centroid
         if M_blue["m00"] != 0:
             flag2 = True
             c2X = int(M_blue["m10"] / M_blue["m00"])
@@ -87,6 +110,8 @@ while True:
 
         M_red = cv2.moments(red_hull)
         flag1 = False
+
+        # Detect the centroid
         if M_red["m00"] != 0:
             flag1 = True
             c1X = int(M_red["m10"] / M_red["m00"])
@@ -95,6 +120,8 @@ while True:
 
         M_blue = cv2.moments(blue_hull)
         flag2 = False
+
+        # Detect the centroid
         if M_blue["m00"] != 0:
             flag2 = True
             c2X = int(M_blue["m10"] / M_blue["m00"])
@@ -107,9 +134,9 @@ while True:
             mouseLoc = (sx - (sx * (cX/imw)), sy*(cY/imh))
             mouse.position = mouseLoc
     cv2.imshow("img", img)
-    cv2.imshow("mix", mix_blur)
-    cv2.imshow("red", red_blur)
-    cv2.imshow("blue", blue_blur)
+    # cv2.imshow("mix", mix_blur)
+    # cv2.imshow("red", red_blur)
+    # cv2.imshow("blue", blue_blur)
 
     key = cv2.waitKey(1)
 
