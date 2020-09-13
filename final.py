@@ -1,3 +1,4 @@
+
 import cv2
 import numpy as np
 from pynput.mouse import Button, Controller
@@ -10,14 +11,14 @@ app = wx.App(False)
 (sx, sy) = wx.GetDisplaySize()
 
 
-# To set the HSV values of range
+# To set the HSV values of ranges
 lower_blue = np.array([110, 100, 100])
 upper_blue = np.array([130, 255, 255])
 lower_red = np.array([170, 120, 70])
 upper_red = np.array([180, 255, 255])
 
 # To resize the image according to the screen size
-imw = 500
+imw = 1000
 imh = int(imw * (sy / sx))
 mousePress = False
 cap = cv2.VideoCapture(0)
