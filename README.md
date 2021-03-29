@@ -105,8 +105,6 @@ python final.py
 ## Contributors
 
 - [Kush Kothari](https://github.com/kkothari2001)
-- Sahil Satpute
-- Shubham Pawar
 
 <!-- ACKNOWLEDGEMENTS AND REFERENCES -->
 
